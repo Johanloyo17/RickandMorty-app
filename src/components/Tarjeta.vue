@@ -14,9 +14,9 @@
 
         <!-- cont -->
         <v-card-text>
-            <span>Number 10</span><br>
+            <span>{{item.origin.name}}</span><br>
             <span class="text--primary">
-                <span>Whitehaven Beach</span><br>
+                <span>{{item.species}}</span><br>
             </span>
         </v-card-text>
 

@@ -3,54 +3,54 @@
 		<v-layout row wrap>
 			
 			<v-layout row wrap justify-center>
-				
 					<v-flex xs12 d-flex justify-center my-5 align-center>
 						<div class="xs4">
-						<v-text-field
-							v-model="name"
-							label="Nombre del personaje" ma-3
-							@keyup.enter="buscar_p" class="formName"
-
-						></v-text-field>
+							<v-text-field
+								v-model="name"
+								label="Nombre del personaje" ma-3
+								@keyup.enter="buscar_p" class="formName"
+								>
+							</v-text-field>
 						</div>
-						<v-btn @click="buscar_p" pa-3  medium  color="success">Consultar</v-btn>
+						<!-- boton buscar -->
+						<v-btn 
+							@click="buscar_p" pa-3  
+							medium  color="success"
+							>
+								Consultar
+						</v-btn>
 					</v-flex>
 			
 			<!-- cards -->
-			
 					<v-layout row wrap>
-						
-						
-							<tarjeta xs4 d-flex md4 pa-4 xs6 v-for="item in personajes" :key="item.id" :item="item" />
-						
+						<tarjeta class="ma-4"  d-flex v-for="item in personajes" :key="item.id" :item="item" />
 					</v-layout>
-				
 			</v-layout>
 
 		</v-layout>
 
 		<!-- paginacion -->
-		
 		<v-layout row wrap justify-center my-4>
 			<v-flex xs4 d-flex justify-space-around align-center>
+				<!-- boton -1 -->
 				<v-btn  
 					text small 
 					color="primary" @click="changePage(page -  1)"
-				
 					>
 					atras
 				</v-btn>
+
 				<v-btn rounded text color="primary" dark>{{page}}/{{pages}}</v-btn>
-				
+				<!-- boton +1 -->
 				<v-btn  
 					text small 
 					color="primary" @click="changePage(page + 1)"
-				
 					>
 					Sigiente
 				</v-btn>
 			</v-flex>
 		</v-layout>
+
 	</v-container>
 </template>
 
@@ -81,37 +81,43 @@
 		},
 
 		methods:{
+			// metodo para definir la configuracion axios 
 			define_configAxios(){
 				const config_axios = {
 					url:'https://rickandmortyapi.com/api/character/',
 					method: 'get',
-					responseType: 'json',
-					data:{},
 					header:{
 						'Content-Type': 'application/json'
 					},
 					params:{
 						name : this.name,
 						page : this.page,
-						pages : this.cantidad,
+						
 					}
 				};
 				this.config_axios = config_axios;
 				console.log("se esta redefiniendo la configuracion de axios")
-
 			},
+
 
 			buscar_p(){
 				this.define_configAxios();
 				console.log(this.config_axios);
-				console.log("coño de la madre nojoda");
+				console.log(" iniciando busqueda de personaje");
 
-				axios.request(this.config_axios).then((response) => {
-					console.log("datos traidos: " + response)
-					console.log('llamando datos!')
-				})
-			}
-
+				axios.request(this.config_axios)
+					.then((response) => {
+						console.log('llamando datos!')
+						console.log(response)
+						this.personajes = response.data.results 
+						this.pages = response.data.pages 
+					})
+			},
+			changePage(page){
+					this.page = page <=0 || page > this.pages ? this.page : page;
+					this.buscar_p();
+					console.log(page)
+				},
 
 			// 	dameDatos(){
 			// 		const params = {
@@ -127,7 +133,7 @@
 			// 			})
 			// 		console.log("llamado a datos!")
 			// 	},
-
+			
 			// 	changePage(page){
 			// 		this.page = page <=0 || page > this.pages ? this.page : page;
 			// 		this.dameDatos();
