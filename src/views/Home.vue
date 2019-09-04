@@ -14,23 +14,27 @@
 						</div>
 						<!-- boton buscar -->
 						<v-btn 
-							@click="buscar_p" pa-3  
+							@click="buscar_p" pa-1  
 							medium  color="success"
 							>
-								Consultar
+								Buscar
 						</v-btn>
 					</v-flex>
 			
 			<!-- cards -->
 					<v-layout row wrap>
-						<tarjeta class="ma-4"  d-flex v-for="item in personajes" :key="item.id" :item="item" />
+						<tarjeta class="ma-4 "
+								v-for="item in personajes" 
+								:key="item.id" :item="item" 
+								@showModal="showModal"
+						/>
 					</v-layout>
 			</v-layout>
 
 		</v-layout>
 
 		<!-- paginacion -->
-		<v-layout row wrap justify-center my-4>
+		<v-layout  v-if="search" row wrap justify-center my-4>
 			<v-flex xs4 d-flex justify-space-around align-center>
 				<!-- boton -1 -->
 				<v-btn  
@@ -57,6 +61,7 @@
 <script>
 	import axios from "axios";
 	import Tarjeta from'../components/Tarjeta'
+import { async } from 'q';
 
 	export default {
 		components: {
@@ -69,8 +74,12 @@
 				personajes: [],
 				page:1,
 				pages: 1,
-				cantidad: 5,
-				config_axios:{}
+				
+				config_axios:{},
+				search: false,
+
+				// if search one character
+				characterSelected:{}
 			}
 		},
 		
@@ -107,18 +116,32 @@
 
 				axios.request(this.config_axios)
 					.then((response) => {
-						console.log('llamando datos!')
-						console.log(response)
-						this.personajes = response.data.results 
-						this.pages = response.data.pages 
+						console.log('llamando datos!');
+						console.log(response);
+						this.personajes = response.data.results;
+						this.pages = response.data.info.pages;
+						this.search= true; 
 					})
 			},
+			
 			changePage(page){
 					this.page = page <=0 || page > this.pages ? this.page : page;
 					this.buscar_p();
 					console.log(page)
-				},
+			},
+			showModal(id){
+				console.log("personaje de ID: " + id)
+				this.fechPersonaje(id)
+			},
+			async fechPersonaje(id) {
+				let params = id
+				let result = await axios.get(this.config_axios.url+params)
+				this.characterSelected = result.data
+				console.log(result)
+			}
 
+
+				// METODO ALTERNO 
 			// 	dameDatos(){
 			// 		const params = {
 			// 			page: this.page,

@@ -25,15 +25,11 @@
             <v-btn
                 text
                 color="orange"
+                @click="showMore(item.id)"
             >
-                Share
+                Ver mas 
             </v-btn>
-            <v-btn
-                text
-                color="orange"
-            >
-                Explore
-            </v-btn>
+            
         </v-card-actions>
     </v-card>
 
@@ -45,6 +41,14 @@ export default {
         return {
             
         }
+
     },
+    methods:{
+        showMore(id){
+            this.$emit('showModal', id)
+            
+        } 
+    }
+
 }
 </script>
