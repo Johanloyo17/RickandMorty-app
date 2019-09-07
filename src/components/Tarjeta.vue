@@ -1,7 +1,6 @@
 <template>
     <v-card
         class="mx-auto"
-        
     >
         <!-- head -->
         <v-img

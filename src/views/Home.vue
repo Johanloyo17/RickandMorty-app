@@ -21,7 +21,11 @@
 						</v-btn>
 					</v-flex>
 			
-			<!-- cards -->
+
+			<ShowMore
+				:characterSelected="characterSelected"
+			/>
+			<!-- cards Galery-->
 					<v-layout row wrap>
 						<tarjeta class="ma-4 "
 								v-for="item in personajes" 
@@ -60,12 +64,14 @@
 
 <script>
 	import axios from "axios";
-	import Tarjeta from'../components/Tarjeta'
+	import Tarjeta from'../components/Tarjeta';
+	import ShowMore from'../components/ShowMore'
 import { async } from 'q';
 
 	export default {
 		components: {
 			Tarjeta,
+			ShowMore
 		},
 		data() {
 			return {
@@ -139,6 +145,21 @@ import { async } from 'q';
 				this.characterSelected = result.data
 				console.log(result)
 			}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 				// METODO ALTERNO 
