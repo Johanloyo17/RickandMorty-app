@@ -24,6 +24,8 @@
 
 			<ShowMore
 				:characterSelected="characterSelected"
+				:IsModal="IsModal" :Isloading="IsloadingModal"
+				@closeModal="IsModal=false"
 			/>
 			<!-- cards Galery-->
 					<v-layout row wrap>
@@ -66,7 +68,7 @@
 	import axios from "axios";
 	import Tarjeta from'../components/Tarjeta';
 	import ShowMore from'../components/ShowMore'
-import { async } from 'q';
+	import { async } from 'q';
 
 	export default {
 		components: {
@@ -77,15 +79,19 @@ import { async } from 'q';
 			return {
 				name:'',
 				link: "",
+				config_axios:{},
+				//info search Characters
 				personajes: [],
 				page:1,
 				pages: 1,
 				
-				config_axios:{},
 				search: false,
 
 				// if search one character
-				characterSelected:{}
+				characterSelected:{},
+				IsModal:false,
+				//loader one character
+				IsloadingModal: false, 
 			}
 		},
 		
@@ -114,7 +120,7 @@ import { async } from 'q';
 				console.log("se esta redefiniendo la configuracion de axios")
 			},
 
-
+			//metodo para buscar personajes por nombre PRIMARY
 			buscar_p(){
 				this.define_configAxios();
 				console.log(this.config_axios);
@@ -129,65 +135,31 @@ import { async } from 'q';
 						this.search= true; 
 					})
 			},
-			
+
+			//magination method
 			changePage(page){
 					this.page = page <=0 || page > this.pages ? this.page : page;
 					this.buscar_p();
 					console.log(page)
 			},
+			//metodo que recibe de showmore para enviar la id y realizar un busqueda de un personaje escogido
 			showModal(id){
-				console.log("personaje de ID: " + id)
-				this.fechPersonaje(id)
+				console.log("personaje de ID: " + id);
+				this.fechPersonaje(id);
+				this.IsloadingModal = true;
 			},
+
+			//metodo para buscar un personaje en especifico 
 			async fechPersonaje(id) {
 				let params = id
 				let result = await axios.get(this.config_axios.url+params)
-				this.characterSelected = result.data
-				console.log(result)
-			}
+				this.characterSelected = result.data;
+				console.log(result);
+				this.IsloadingModal = false
+				this.IsModal = true
+				
+			},
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				// METODO ALTERNO 
-			// 	dameDatos(){
-			// 		const params = {
-			// 			page: this.page,
-			// 			name: this.name
-			// 		};
-			// 		let result = axios
-			// 			.get("https://rickandmortyapi.com/api/character/", {params})
-			// 			.then(res =>{
-			// 				this.pages = res.data.info.pages;
-			// 				this.personajes = res.data.results
-			// 				console.log(res)
-			// 			})
-			// 		console.log("llamado a datos!")
-			// 	},
-			
-			// 	changePage(page){
-			// 		this.page = page <=0 || page > this.pages ? this.page : page;
-			// 		this.dameDatos();
-			// 		console.log(page)
-			// 	},
-			// 	buscar(){
-			// 		this.page = 1
-			// 		this.dameDatos()
-			// 		console.log("buscando a " + this.name)
-			// 	}
 		},
 	}
 </script>
