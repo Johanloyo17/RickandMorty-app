@@ -119,11 +119,6 @@ export default {
             mierda: true,
             modalImg:"../assets/modalImg.jpg",
             tab: null,
-            infomierda:{
-                name: 'johan',
-                age: 22,
-                lastName: 'Loyo',
-            }
 
         }
     },
